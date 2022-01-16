@@ -1,15 +1,24 @@
 <template>
-  <div class="container">
+  <div
+    class="container"
+    @keyup.down="handleDown"
+    @keyup.enter="handleEnter"
+    @keyup.up="handleUp"
+  >
     <input
       v-model="pokemonSearch"
       placeholder="Search pokemon"
       type="text"
       :class="changeClass"
-      @keyup.enter="handleClick"
       @input="handleChange"
     />
     <div :class="checkDropdown">
-      <div v-for="pokemon in potentialPokemon" :key="pokemon.name">
+      <div
+        v-for="pokemon in potentialPokemon"
+        :key="pokemon.name"
+        class="dropdownItem"
+        @click="handleClick"
+      >
         {{ pokemon.name }}
       </div>
     </div>
@@ -37,10 +46,8 @@ export default {
       },
       set(str) {
         if (str.length > 0) {
-          console.log("true");
           this.showDropdown = true;
         } else {
-          console.log("false");
           this.showDropdown = false;
         }
         const list = this.$store.state.pokemonList;
@@ -70,6 +77,15 @@ export default {
   methods: {
     handleClick() {
       console.log("you clicked it");
+    },
+    handleEnter() {
+      console.log("you hit enter");
+    },
+    handleUp() {
+      console.log("you hit up");
+    },
+    handleDown() {
+      console.log("you hit down");
     },
     handleChange() {
       const list = this.$store.state.pokemonList;
@@ -112,7 +128,18 @@ export default {
   z-index: 1;
   background: white;
   margin-top: 20px;
-  max-height: 500px;
-  overflow: scroll;
+  max-height: 400px;
+  min-width: 175px;
+  overflow-y: scroll;
+}
+.dropdownItem {
+  padding: 3px;
+  border: 1px black solid;
+}
+.dropdownItem:focus {
+  background-color: lightgreen;
+}
+.dropdownItem:hover {
+  background-color: lightgreen;
 }
 </style>
