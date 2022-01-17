@@ -14,19 +14,16 @@
     />
     <div :class="checkDropdown">
       <div
-        v-for="pokemon in potentialPokemon"
-        :key="pokemon.name"
-        class="dropdownItem"
-        @click="handleClick"
+        v-for="(pokemon, index) in potentialPokemon"
+        :key="index"
+        :ref="getRef(index)"
+        :class="changeDropdownClass(index)"
+        @click="handleClick(pokemon)"
+        @mouseenter="changeFocus(index)"
       >
         {{ pokemon.name }}
       </div>
     </div>
-    <!-- <img
-      @click="handleClick"
-      src="../../public/pokeball.png"
-      class="search-button"
-    /> -->
   </div>
 </template>
 
@@ -37,6 +34,7 @@ export default {
     return {
       isPokemon: false,
       showDropdown: false,
+      focusedItem: 1,
     };
   },
   computed: {
@@ -75,17 +73,30 @@ export default {
     },
   },
   methods: {
-    handleClick() {
-      console.log("you clicked it");
+    handleClick(pokemon) {
+      this.$store.commit("setPokemonSearch", pokemon.name);
+      fetch(`https://pokeapi.co/api/v2/pokemon/${pokemon.name}`)
+        .then((response) => response.json())
+        .then((data) => this.$store.commit("setSelectedPokemon", data));
+      this.showDropdown = false;
+      this.isPokemon = true;
     },
     handleEnter() {
-      console.log("you hit enter");
+      if (this.$store.state.pokemonSearch.length >= 1) {
+        const potentialPokemon = this.$store.state.potentialPokemon;
+        this.handleClick(potentialPokemon[this.focusedItem - 1]);
+      }
     },
     handleUp() {
-      console.log("you hit up");
+      if (this.focusedItem > 1) {
+        this.focusedItem--;
+      }
     },
     handleDown() {
-      console.log("you hit down");
+      const potentialPokemon = this.$store.state.potentialPokemon;
+      if (this.focusedItem < potentialPokemon.length) {
+        this.focusedItem++;
+      }
     },
     handleChange() {
       const list = this.$store.state.pokemonList;
@@ -94,6 +105,19 @@ export default {
         pokemon.name.includes(search)
       );
       this.$store.commit("setPotentialPokemon", searchList);
+    },
+    getRef(index) {
+      return `dropItem${index + 1}`;
+    },
+    changeDropdownClass(index) {
+      if (index + 1 === this.focusedItem) {
+        return "dropdownItemFocus";
+      } else {
+        return "dropdownItem";
+      }
+    },
+    changeFocus(index) {
+      this.focusedItem = index + 1;
     },
   },
 };
@@ -136,10 +160,9 @@ export default {
   padding: 3px;
   border: 1px black solid;
 }
-.dropdownItem:focus {
+.dropdownItemFocus {
   background-color: lightgreen;
-}
-.dropdownItem:hover {
-  background-color: lightgreen;
+  border-color: white;
+  padding: 3px;
 }
 </style>

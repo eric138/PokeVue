@@ -5,6 +5,7 @@ export default createStore({
     pokemonList: [],
     pokemonSearch: "",
     potentialPokemon: [],
+    selectedPokemon: {},
   },
   mutations: {
     setPokemonList(state, pokeList) {
@@ -15,6 +16,9 @@ export default createStore({
     },
     setPotentialPokemon(state, pokeList) {
       state.potentialPokemon = pokeList;
+    },
+    setSelectedPokemon(state, pokemon) {
+      state.selectedPokemon = pokemon;
     },
   },
   actions: {},
