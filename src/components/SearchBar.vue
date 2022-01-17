@@ -7,10 +7,13 @@
   >
     <input
       v-model="pokemonSearch"
-      placeholder="Search pokemon"
+      placeholder="Gotta search them all!"
       type="text"
+      ref="input"
       :class="changeClass"
       @input="handleChange"
+      @blur="handleBlur"
+      @focus="handleFocus"
     />
     <div :class="checkDropdown">
       <div
@@ -18,7 +21,7 @@
         :key="index"
         :ref="getRef(index)"
         :class="changeDropdownClass(index)"
-        @click="handleClick(pokemon)"
+        @mousedown="handleClick(pokemon)"
         @mouseenter="changeFocus(index)"
       >
         {{ pokemon.name }}
@@ -119,6 +122,15 @@ export default {
     changeFocus(index) {
       this.focusedItem = index + 1;
     },
+    handleBlur() {
+      this.showDropdown = false;
+    },
+    handleFocus() {
+      const search = this.$store.state.pokemonSearch;
+      if (search.length > 0) {
+        this.showDropdown = true;
+      }
+    },
   },
 };
 </script>
@@ -134,6 +146,10 @@ export default {
 }
 .input-red {
   color: red;
+  border: 1px black solid;
+  border-radius: 24px;
+  width: 200px;
+  height: 30px;
 }
 .input-green {
   color: green;

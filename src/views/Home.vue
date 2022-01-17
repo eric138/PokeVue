@@ -1,18 +1,36 @@
 <template>
   <div class="container">
-    <p>{{ selectedPokemon.name }}</p>
-    <p>{{ selectedPokemon.abilities[0].ability.name }}</p>
-    <p>{{ selectedPokemon.abilities[1].ability.name }}</p>
+    <div v-if="selectedPokemon">
+      <p>{{ selectedPokemon.name }}</p>
+    </div>
+    <div v-else>
+      <NoPokemon />
+    </div>
   </div>
 </template>
 
 <script>
+import NoPokemon from "../components/NoPokemon.vue";
+
 export default {
   name: "Home",
+  data() {
+    return {
+      showPokemon: false,
+    };
+  },
+  mounted() {
+    console.log("mounted");
+  },
   computed: {
     selectedPokemon() {
-      return this.$store.state.selectedPokemon;
+      return this.$store.state.selectedPokemon.name
+        ? this.$store.state.selectedPokemon
+        : null;
     },
+  },
+  components: {
+    NoPokemon,
   },
 };
 </script>
