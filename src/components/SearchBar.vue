@@ -15,11 +15,11 @@
       @blur="handleBlur"
       @focus="handleFocus"
     />
-    <div :class="checkDropdown">
+    <div :class="checkDropdown" id="scrollContainer">
       <div
         v-for="(pokemon, index) in potentialPokemon"
         :key="index"
-        :ref="getRef(index)"
+        :id="getRefs(index + 1)"
         :class="changeDropdownClass(index)"
         @mousedown="handleClick(pokemon)"
         @mouseenter="changeFocus(index)"
@@ -27,10 +27,12 @@
         {{ pokemon.name }}
       </div>
     </div>
+    <img :src="pokeball" class="img" @mousedown="handleImgClick" />
   </div>
 </template>
 
 <script>
+import pokeball from "../../public/pokeball.png";
 export default {
   name: "SearchBar",
   data() {
@@ -38,6 +40,8 @@ export default {
       isPokemon: false,
       showDropdown: false,
       focusedItem: 1,
+      pokeball: pokeball,
+      buttonDisabled: true,
     };
   },
   computed: {
@@ -55,8 +59,10 @@ export default {
         const pokeFound = list.find((pokemon) => pokemon.name === str);
         if (pokeFound) {
           this.isPokemon = true;
+          this.buttonDisabled = false;
         } else {
           this.isPokemon = false;
+          this.buttonDisabled = true;
         }
         this.$store.commit("setPokemonSearch", str);
       },
@@ -83,6 +89,7 @@ export default {
         .then((data) => this.$store.commit("setSelectedPokemon", data));
       this.showDropdown = false;
       this.isPokemon = true;
+      this.buttonDisabled = true;
     },
     handleEnter() {
       if (this.$store.state.pokemonSearch.length >= 1) {
@@ -90,27 +97,32 @@ export default {
         this.handleClick(potentialPokemon[this.focusedItem - 1]);
       }
     },
+    handleImgClick() {
+      if (!this.buttonDisabled && this.isPokemon) {
+        this.handleEnter();
+      }
+    },
     handleUp() {
       if (this.focusedItem > 1) {
         this.focusedItem--;
+        this.fixScrolling(this.focusedItem);
       }
     },
     handleDown() {
       const potentialPokemon = this.$store.state.potentialPokemon;
       if (this.focusedItem < potentialPokemon.length) {
         this.focusedItem++;
+        this.fixScrolling(this.focusedItem);
       }
     },
     handleChange() {
       const list = this.$store.state.pokemonList;
       const search = this.$store.state.pokemonSearch;
-      const searchList = list.filter((pokemon) =>
-        pokemon.name.includes(search)
+      const searchList = list.filter(
+        (pokemon) =>
+          pokemon.name.includes(search) && !pokemon.name.includes("-")
       );
       this.$store.commit("setPotentialPokemon", searchList);
-    },
-    getRef(index) {
-      return `dropItem${index + 1}`;
     },
     changeDropdownClass(index) {
       if (index + 1 === this.focusedItem) {
@@ -130,6 +142,13 @@ export default {
       if (search.length > 0) {
         this.showDropdown = true;
       }
+    },
+    fixScrolling(itemIndex) {
+      var container = this.$el.querySelector(`#dropItem${itemIndex}`);
+      container.scrollIntoView();
+    },
+    getRefs(index) {
+      return `dropItem${index}`;
     },
   },
 };
@@ -154,6 +173,11 @@ export default {
 }
 .input-green {
   color: green;
+  border: 1px black solid;
+  border-radius: 24px;
+  width: 200px;
+  height: 30px;
+  padding-left: 12px;
 }
 .holder {
   position: relative;
@@ -165,8 +189,8 @@ export default {
 .dropdownShow {
   display: block;
   position: absolute;
-  border: 1px solid black;
-  border-radius: 24px;
+  border: 2px solid black;
+  border-radius: 8px;
   z-index: 1;
   background: white;
   margin-top: 32px;
@@ -175,12 +199,36 @@ export default {
   overflow-y: scroll;
 }
 .dropdownItem {
-  padding: 3px;
-  border: 1px black solid;
+  padding: 8px;
 }
 .dropdownItemFocus {
   background-color: lightgreen;
-  border-color: white;
+  border: 1px solid black;
+  border-radius: 24px;
   padding: 3px;
+}
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px grey;
+  border-radius: 24px;
+}
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: red;
+  border-radius: 24px;
+}
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #b30000;
+}
+.img {
+  height: 34px;
+  width: auto;
+  padding-left: 12px;
 }
 </style>
