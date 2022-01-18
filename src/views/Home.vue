@@ -1,7 +1,7 @@
 <template>
-  <div class="container">
+  <div class="home">
     <div v-if="selectedPokemon">
-      <p>{{ selectedPokemon.name }}</p>
+      <Pokemon />
     </div>
     <div v-else>
       <NoPokemon />
@@ -11,17 +11,10 @@
 
 <script>
 import NoPokemon from "../components/NoPokemon.vue";
+import Pokemon from "../components/Pokemon.vue";
 
 export default {
   name: "Home",
-  data() {
-    return {
-      showPokemon: false,
-    };
-  },
-  mounted() {
-    console.log("mounted");
-  },
   computed: {
     selectedPokemon() {
       return this.$store.state.selectedPokemon.name
@@ -31,15 +24,43 @@ export default {
   },
   components: {
     NoPokemon,
+    Pokemon,
   },
 };
 </script>
 
 <style scoped>
-.container {
-  display: flex;
+.home {
+  margin-top: 24px;
   align-content: center;
   align-items: center;
-  flex-direction: column;
+  min-height: 300px;
+  width: 80%;
+  background-color: white;
+  border-color: black;
+  border-radius: 8px;
+  border-style: solid;
+  justify-content: space-between;
+  overflow-y: scroll;
+  box-shadow: 0 5px 10px rgb(0 0 0 / 0.5);
+}
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px grey;
+  border-radius: 24px;
+}
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: red;
+  border-radius: 24px;
+}
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #b30000;
 }
 </style>

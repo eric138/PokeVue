@@ -1,6 +1,6 @@
 <template>
   <div
-    class="container"
+    class="searchbar"
     @keyup.down="handleDown"
     @keyup.enter="handleEnter"
     @keyup.up="handleUp"
@@ -155,7 +155,7 @@ export default {
 </script>
 
 <style scoped>
-.container {
+.searchbar {
   display: flex;
 }
 .search-button {

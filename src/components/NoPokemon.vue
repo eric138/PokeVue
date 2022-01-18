@@ -1,7 +1,5 @@
 <template>
-  <div class="container">
-    <p>Select a pokemon first</p>
-  </div>
+  <p class="txt">Search for Pokemon!</p>
 </template>
 
 <script>
@@ -11,7 +9,7 @@ export default {
 </script>
 
 <style scoped>
-.container {
-  display: flex;
+.txt {
+  color: red;
 }
 </style>

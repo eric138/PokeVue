@@ -1,5 +1,10 @@
 <template>
-  <div class="app-container">
+  <div
+    class="app-container"
+    :style="{
+      'max-height': `calc${windowHeight - 20}px;`,
+    }"
+  >
     <Header />
     <router-view />
   </div>
@@ -9,6 +14,11 @@
 import Header from "@/components/Header.vue";
 
 export default {
+  data() {
+    return {
+      windowHeight: window.innerHeight,
+    };
+  },
   components: {
     Header,
   },
@@ -38,6 +48,7 @@ export default {
   align-content: center;
   display: flex;
   flex-direction: column;
-  min-width: 75%;
+  max-height: 900px;
+  overflow: hidden;
 }
 </style>

@@ -40,6 +40,7 @@ export default {
   border-radius: 24px;
   border-style: solid;
   justify-content: space-between;
+  box-shadow: 0 5px 10px rgb(0 0 0 / 0.5);
 }
 #nav {
   padding-left: 24px;
