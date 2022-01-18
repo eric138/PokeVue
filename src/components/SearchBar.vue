@@ -150,6 +150,7 @@ export default {
   border-radius: 24px;
   width: 200px;
   height: 30px;
+  padding-left: 12px;
 }
 .input-green {
   color: green;
@@ -165,11 +166,12 @@ export default {
   display: block;
   position: absolute;
   border: 1px solid black;
+  border-radius: 24px;
   z-index: 1;
   background: white;
-  margin-top: 20px;
+  margin-top: 32px;
   max-height: 400px;
-  min-width: 175px;
+  min-width: 212px;
   overflow-y: scroll;
 }
 .dropdownItem {
